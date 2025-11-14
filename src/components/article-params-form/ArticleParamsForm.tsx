@@ -15,7 +15,7 @@ export const ArticleParamsForm = () => {
 		<>
 			<ArrowButton isOpen={isOpen} onClick={toggleSideBar} />
 			<aside
-				className={clsx(styles.container, isOpen ? styles.container_open : '')}>
+				className={clsx(styles.container, isOpen && styles.container_open)}>
 				<form className={styles.form}>
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' htmlType='reset' type='clear' />
