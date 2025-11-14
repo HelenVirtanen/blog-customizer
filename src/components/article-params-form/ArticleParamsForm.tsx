@@ -2,10 +2,13 @@ import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
+import { Separator } from 'src/ui/separator';
 import {
 	fontFamilyOptions,
 	fontSizeOptions,
 	fontColors,
+	backgroundColors,
+	contentWidthArr,
 } from 'src/constants/articleProps';
 import { useState, useEffect, useRef } from 'react';
 
@@ -22,6 +25,8 @@ export const ArticleParamsForm = () => {
 	const [fontFamily, setFontFamily] = useState(fontFamilyOptions[0]);
 	const [fontSize, setFontSize] = useState(fontSizeOptions[0]);
 	const [fontColor, setFontColor] = useState(fontColors[0]);
+	const [backgroundColor, setBackgroundColor] = useState(backgroundColors[0]);
+	const [contentWidth, setContentWidth] = useState(contentWidthArr[0]);
 
 	useEffect(() => {
 		const closeSidebarByEscape = (e: KeyboardEvent) => {
@@ -73,6 +78,20 @@ export const ArticleParamsForm = () => {
 						title='Цвет шрифта'
 						onChange={setFontColor}
 					/>
+					<Separator />
+					<Select
+						selected={backgroundColor}
+						options={backgroundColors}
+						onChange={setBackgroundColor}
+						title='Цвет фона'
+					/>
+					<Select
+						selected={contentWidth}
+						options={contentWidthArr}
+						onChange={setContentWidth}
+						title='Ширина контента'
+					/>
+
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' htmlType='reset' type='clear' />
 						<Button title='Применить' htmlType='submit' type='apply' />
