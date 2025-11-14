@@ -1,7 +1,12 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { Select } from 'src/ui/select';
-import { fontFamilyOptions } from 'src/constants/articleProps';
+import { RadioGroup } from 'src/ui/radio-group';
+import {
+	fontFamilyOptions,
+	fontSizeOptions,
+	fontColors,
+} from 'src/constants/articleProps';
 import { useState, useEffect, useRef } from 'react';
 
 import clsx from 'clsx';
@@ -15,6 +20,8 @@ export const ArticleParamsForm = () => {
 	const sidebarRef = useRef<HTMLDivElement>(null);
 
 	const [fontFamily, setFontFamily] = useState(fontFamilyOptions[0]);
+	const [fontSize, setFontSize] = useState(fontSizeOptions[0]);
+	const [fontColor, setFontColor] = useState(fontColors[0]);
 
 	useEffect(() => {
 		const closeSidebarByEscape = (e: KeyboardEvent) => {
@@ -52,6 +59,19 @@ export const ArticleParamsForm = () => {
 						options={fontFamilyOptions}
 						title='Шрифт'
 						onChange={setFontFamily}
+					/>
+					<RadioGroup
+						name='Размер шрифта'
+						options={fontSizeOptions}
+						selected={fontSize}
+						title='Размер шрифта'
+						onChange={setFontSize}
+					/>
+					<Select
+						selected={fontColor}
+						options={fontColors}
+						title='Цвет шрифта'
+						onChange={setFontColor}
 					/>
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' htmlType='reset' type='clear' />
