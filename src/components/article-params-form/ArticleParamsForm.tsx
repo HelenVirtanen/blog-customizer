@@ -7,15 +7,13 @@ import styles from './ArticleParamsForm.module.scss';
 
 export const ArticleParamsForm = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const toggleSideBar = () => {
+		setIsOpen(!isOpen);
+	};
 
 	return (
 		<>
-			<ArrowButton
-				isOpen={isOpen}
-				onClick={() => {
-					setIsOpen(!isOpen);
-				}}
-			/>
+			<ArrowButton isOpen={isOpen} onClick={toggleSideBar} />
 			<aside
 				className={clsx(styles.container, isOpen ? styles.container_open : '')}>
 				<form className={styles.form}>
