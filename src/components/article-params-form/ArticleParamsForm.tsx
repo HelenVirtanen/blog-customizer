@@ -1,10 +1,7 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { Select } from 'src/ui/select';
-import {
-	fontFamilyOptions,
-	fontFamilyClasses,
-} from 'src/constants/articleProps';
+import { fontFamilyOptions } from 'src/constants/articleProps';
 import { useState, useEffect, useRef } from 'react';
 
 import clsx from 'clsx';
@@ -15,8 +12,9 @@ export const ArticleParamsForm = () => {
 	const toggleSideBar = () => {
 		setIsOpen(!isOpen);
 	};
-
 	const sidebarRef = useRef<HTMLDivElement>(null);
+
+	const [fontFamily, setFontFamily] = useState(fontFamilyOptions[0]);
 
 	useEffect(() => {
 		const closeSidebarByEscape = (e: KeyboardEvent) => {
@@ -50,13 +48,10 @@ export const ArticleParamsForm = () => {
 				<form className={styles.form}>
 					<h1 className={styles.heading}>Задайте параметры</h1>
 					<Select
-						selected={{
-							title: 'Open Sans',
-							value: 'Open Sans',
-							className: fontFamilyClasses[0],
-						}}
+						selected={fontFamily}
 						options={fontFamilyOptions}
 						title='Шрифт'
+						onChange={setFontFamily}
 					/>
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' htmlType='reset' type='clear' />
