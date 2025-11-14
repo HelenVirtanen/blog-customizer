@@ -42,7 +42,11 @@ export const ArticleParamsForm = () => {
 
 	const handleReset = (e: React.FormEvent) => {
 		e.preventDefault();
-		setIsOpen(false);
+		setFontFamily(defaultArticleState.fontFamilyOption);
+		setFontSize(defaultArticleState.fontSizeOption);
+		setFontColor(defaultArticleState.fontColor);
+		setBackgroundColor(defaultArticleState.backgroundColor);
+		setContentWidth(defaultArticleState.contentWidth);
 	};
 
 	useEffect(() => {
