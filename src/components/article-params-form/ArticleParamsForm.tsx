@@ -9,6 +9,7 @@ import {
 	fontColors,
 	backgroundColors,
 	contentWidthArr,
+	defaultArticleState,
 } from 'src/constants/articleProps';
 import { useState, useEffect, useRef } from 'react';
 
@@ -22,11 +23,27 @@ export const ArticleParamsForm = () => {
 	};
 	const sidebarRef = useRef<HTMLDivElement>(null);
 
-	const [fontFamily, setFontFamily] = useState(fontFamilyOptions[0]);
-	const [fontSize, setFontSize] = useState(fontSizeOptions[0]);
-	const [fontColor, setFontColor] = useState(fontColors[0]);
-	const [backgroundColor, setBackgroundColor] = useState(backgroundColors[0]);
-	const [contentWidth, setContentWidth] = useState(contentWidthArr[0]);
+	const [fontFamily, setFontFamily] = useState(
+		defaultArticleState.fontFamilyOption
+	);
+	const [fontSize, setFontSize] = useState(defaultArticleState.fontSizeOption);
+	const [fontColor, setFontColor] = useState(defaultArticleState.fontColor);
+	const [backgroundColor, setBackgroundColor] = useState(
+		defaultArticleState.backgroundColor
+	);
+	const [contentWidth, setContentWidth] = useState(
+		defaultArticleState.contentWidth
+	);
+
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault();
+		setIsOpen(false);
+	};
+
+	const handleReset = (e: React.FormEvent) => {
+		e.preventDefault();
+		setIsOpen(false);
+	};
 
 	useEffect(() => {
 		const closeSidebarByEscape = (e: KeyboardEvent) => {
@@ -57,7 +74,10 @@ export const ArticleParamsForm = () => {
 			<aside
 				ref={sidebarRef}
 				className={clsx(styles.container, isOpen && styles.container_open)}>
-				<form className={styles.form}>
+				<form
+					className={styles.form}
+					onSubmit={handleSubmit}
+					onReset={handleReset}>
 					<h1 className={styles.heading}>Задайте параметры</h1>
 					<Select
 						selected={fontFamily}
