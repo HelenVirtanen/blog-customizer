@@ -1,6 +1,6 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
@@ -11,22 +11,36 @@ export const ArticleParamsForm = () => {
 		setIsOpen(!isOpen);
 	};
 
+	const sidebarRef = useRef<HTMLDivElement>(null);
+
 	useEffect(() => {
-		const handleEscape = (e: KeyboardEvent) => {
+		const closeSidebarByEscape = (e: KeyboardEvent) => {
 			e.key === 'Escape' && setIsOpen(false);
 		};
 
-		document.addEventListener('keydown', handleEscape);
+		const closeSidebarByClickOutside = (e: MouseEvent) => {
+			if (
+				sidebarRef.current &&
+				!sidebarRef.current.contains(e.target as Node)
+			) {
+				setIsOpen(false);
+			}
+		};
+
+		document.addEventListener('keydown', closeSidebarByEscape);
+		document.addEventListener('mousedown', closeSidebarByClickOutside);
 
 		return () => {
-			document.removeEventListener('keydown', handleEscape);
+			document.removeEventListener('keydown', closeSidebarByEscape);
+			document.removeEventListener('mousedown', closeSidebarByClickOutside);
 		};
-	}, [isOpen]);
+	}, []);
 
 	return (
 		<>
 			<ArrowButton isOpen={isOpen} onClick={toggleSideBar} />
 			<aside
+				ref={sidebarRef}
 				className={clsx(styles.container, isOpen && styles.container_open)}>
 				<form className={styles.form}>
 					<div className={styles.bottomContainer}>
