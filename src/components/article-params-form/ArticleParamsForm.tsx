@@ -1,5 +1,10 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
+import { Select } from 'src/ui/select';
+import {
+	fontFamilyOptions,
+	fontFamilyClasses,
+} from 'src/constants/articleProps';
 import { useState, useEffect, useRef } from 'react';
 
 import clsx from 'clsx';
@@ -44,6 +49,15 @@ export const ArticleParamsForm = () => {
 				className={clsx(styles.container, isOpen && styles.container_open)}>
 				<form className={styles.form}>
 					<h1 className={styles.heading}>Задайте параметры</h1>
+					<Select
+						selected={{
+							title: 'Open Sans',
+							value: 'Open Sans',
+							className: fontFamilyClasses[0],
+						}}
+						options={fontFamilyOptions}
+						title='Шрифт'
+					/>
 					<div className={styles.bottomContainer}>
 						<Button title='Сбросить' htmlType='reset' type='clear' />
 						<Button title='Применить' htmlType='submit' type='apply' />
