@@ -1,6 +1,6 @@
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
@@ -10,6 +10,18 @@ export const ArticleParamsForm = () => {
 	const toggleSideBar = () => {
 		setIsOpen(!isOpen);
 	};
+
+	useEffect(() => {
+		const handleEscape = (e: KeyboardEvent) => {
+			e.key === 'Escape' && setIsOpen(false);
+		};
+
+		document.addEventListener('keydown', handleEscape);
+
+		return () => {
+			document.removeEventListener('keydown', handleEscape);
+		};
+	}, [isOpen]);
 
 	return (
 		<>
