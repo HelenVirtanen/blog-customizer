@@ -10,13 +10,22 @@ import {
 	backgroundColors,
 	contentWidthArr,
 	defaultArticleState,
+	ArticleStateType,
 } from 'src/constants/articleProps';
 import { useState, useEffect, useRef } from 'react';
 
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
 
-export const ArticleParamsForm = () => {
+interface ArticleParamsFormProps {
+	currentState: ArticleStateType;
+	onApply: (newState: ArticleStateType) => void;
+}
+
+export const ArticleParamsForm = ({
+	currentState,
+	onApply,
+}: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 	const toggleSideBar = () => {
 		setIsOpen(!isOpen);
@@ -26,17 +35,32 @@ export const ArticleParamsForm = () => {
 	const [fontFamily, setFontFamily] = useState(
 		defaultArticleState.fontFamilyOption
 	);
-	const [fontSize, setFontSize] = useState(defaultArticleState.fontSizeOption);
-	const [fontColor, setFontColor] = useState(defaultArticleState.fontColor);
+	const [fontSize, setFontSize] = useState(currentState.fontSizeOption);
+	const [fontColor, setFontColor] = useState(currentState.fontColor);
 	const [backgroundColor, setBackgroundColor] = useState(
-		defaultArticleState.backgroundColor
+		currentState.backgroundColor
 	);
-	const [contentWidth, setContentWidth] = useState(
-		defaultArticleState.contentWidth
-	);
+	const [contentWidth, setContentWidth] = useState(currentState.contentWidth);
+
+	useEffect(() => {
+		if (isOpen) {
+			setFontFamily(currentState.fontFamilyOption);
+			setFontSize(currentState.fontSizeOption);
+			setFontColor(currentState.fontColor);
+			setBackgroundColor(currentState.backgroundColor);
+			setContentWidth(currentState.contentWidth);
+		}
+	}, [isOpen, currentState]);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
+		onApply({
+			fontFamilyOption: fontFamily,
+			fontSizeOption: fontSize,
+			fontColor,
+			backgroundColor,
+			contentWidth,
+		});
 		setIsOpen(false);
 	};
 
