@@ -3,6 +3,7 @@ import { Button } from 'src/ui/button';
 import { Select } from 'src/ui/select';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
+import { Text } from 'src/ui/text';
 import {
 	fontFamilyOptions,
 	fontSizeOptions,
@@ -13,6 +14,7 @@ import {
 	ArticleStateType,
 } from 'src/constants/articleProps';
 import { useState, useEffect, useRef } from 'react';
+import { useClose } from 'src/hooks/useClose';
 
 import clsx from 'clsx';
 import styles from './ArticleParamsForm.module.scss';
@@ -27,10 +29,11 @@ export const ArticleParamsForm = ({
 	onApply,
 }: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const closeMenu = () => setIsOpen(false);
 	const toggleSideBar = () => {
-		setIsOpen(!isOpen);
+		setIsOpen((prev) => !prev);
 	};
-	const sidebarRef = useRef<HTMLDivElement>(null);
+	const sidebarRef = useRef<HTMLElement>(null);
 
 	const [localState, setLocalState] = useState<ArticleStateType>(currentState);
 
@@ -47,10 +50,16 @@ export const ArticleParamsForm = ({
 		}
 	}, [isOpen, currentState]);
 
+	useClose({
+		isOpen,
+		onClose: closeMenu,
+		rootRef: sidebarRef,
+	});
+
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 		onApply(localState);
-		setIsOpen(false);
+		closeMenu();
 	};
 
 	const handleReset = (e: React.FormEvent) => {
@@ -58,37 +67,21 @@ export const ArticleParamsForm = ({
 		setLocalState(defaultArticleState);
 	};
 
-	useEffect(() => {
-		const closeSidebarByEscape = (e: KeyboardEvent) => {
-			e.key === 'Escape' && setIsOpen(false);
-		};
-
-		const closeSidebarByClickOutside = (e: MouseEvent) => {
-			sidebarRef.current &&
-				!sidebarRef.current.contains(e.target as Node) &&
-				setIsOpen(false);
-		};
-
-		document.addEventListener('keydown', closeSidebarByEscape);
-		document.addEventListener('mousedown', closeSidebarByClickOutside);
-
-		return () => {
-			document.removeEventListener('keydown', closeSidebarByEscape);
-			document.removeEventListener('mousedown', closeSidebarByClickOutside);
-		};
-	}, []);
-
 	return (
 		<>
 			<ArrowButton isOpen={isOpen} onClick={toggleSideBar} />
 			<aside
 				ref={sidebarRef}
-				className={clsx(styles.container, isOpen && styles.container_open)}>
+				className={clsx(styles.container, {
+					[styles.container_open]: isOpen,
+				})}>
 				<form
 					className={styles.form}
 					onSubmit={handleSubmit}
 					onReset={handleReset}>
-					<h1 className={styles.heading}>Задайте параметры</h1>
+					<Text as='h2' size={31} weight={800} uppercase={true}>
+						Задайте параметры
+					</Text>
 					<Select
 						selected={localState.fontFamilyOption}
 						options={fontFamilyOptions}
