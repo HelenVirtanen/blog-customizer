@@ -32,45 +32,30 @@ export const ArticleParamsForm = ({
 	};
 	const sidebarRef = useRef<HTMLDivElement>(null);
 
-	const [fontFamily, setFontFamily] = useState(
-		defaultArticleState.fontFamilyOption
-	);
-	const [fontSize, setFontSize] = useState(currentState.fontSizeOption);
-	const [fontColor, setFontColor] = useState(currentState.fontColor);
-	const [backgroundColor, setBackgroundColor] = useState(
-		currentState.backgroundColor
-	);
-	const [contentWidth, setContentWidth] = useState(currentState.contentWidth);
+	const [localState, setLocalState] = useState<ArticleStateType>(currentState);
+
+	const handleChange = <K extends keyof ArticleStateType>(
+		key: K,
+		value: ArticleStateType[K]
+	) => {
+		setLocalState((prev) => ({ ...prev, [key]: value }));
+	};
 
 	useEffect(() => {
 		if (isOpen) {
-			setFontFamily(currentState.fontFamilyOption);
-			setFontSize(currentState.fontSizeOption);
-			setFontColor(currentState.fontColor);
-			setBackgroundColor(currentState.backgroundColor);
-			setContentWidth(currentState.contentWidth);
+			setLocalState(currentState);
 		}
 	}, [isOpen, currentState]);
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		onApply({
-			fontFamilyOption: fontFamily,
-			fontSizeOption: fontSize,
-			fontColor,
-			backgroundColor,
-			contentWidth,
-		});
+		onApply(localState);
 		setIsOpen(false);
 	};
 
 	const handleReset = (e: React.FormEvent) => {
 		e.preventDefault();
-		setFontFamily(defaultArticleState.fontFamilyOption);
-		setFontSize(defaultArticleState.fontSizeOption);
-		setFontColor(defaultArticleState.fontColor);
-		setBackgroundColor(defaultArticleState.backgroundColor);
-		setContentWidth(defaultArticleState.contentWidth);
+		setLocalState(defaultArticleState);
 	};
 
 	useEffect(() => {
@@ -79,12 +64,9 @@ export const ArticleParamsForm = ({
 		};
 
 		const closeSidebarByClickOutside = (e: MouseEvent) => {
-			if (
-				sidebarRef.current &&
-				!sidebarRef.current.contains(e.target as Node)
-			) {
+			sidebarRef.current &&
+				!sidebarRef.current.contains(e.target as Node) &&
 				setIsOpen(false);
-			}
 		};
 
 		document.addEventListener('keydown', closeSidebarByEscape);
@@ -108,35 +90,35 @@ export const ArticleParamsForm = ({
 					onReset={handleReset}>
 					<h1 className={styles.heading}>Задайте параметры</h1>
 					<Select
-						selected={fontFamily}
+						selected={localState.fontFamilyOption}
 						options={fontFamilyOptions}
 						title='Шрифт'
-						onChange={setFontFamily}
+						onChange={(val) => handleChange('fontFamilyOption', val)}
 					/>
 					<RadioGroup
 						name='Размер шрифта'
 						options={fontSizeOptions}
-						selected={fontSize}
+						selected={localState.fontSizeOption}
 						title='Размер шрифта'
-						onChange={setFontSize}
+						onChange={(val) => handleChange('fontSizeOption', val)}
 					/>
 					<Select
-						selected={fontColor}
+						selected={localState.fontColor}
 						options={fontColors}
 						title='Цвет шрифта'
-						onChange={setFontColor}
+						onChange={(val) => handleChange('fontColor', val)}
 					/>
 					<Separator />
 					<Select
-						selected={backgroundColor}
+						selected={localState.backgroundColor}
 						options={backgroundColors}
-						onChange={setBackgroundColor}
+						onChange={(val) => handleChange('backgroundColor', val)}
 						title='Цвет фона'
 					/>
 					<Select
-						selected={contentWidth}
+						selected={localState.contentWidth}
 						options={contentWidthArr}
-						onChange={setContentWidth}
+						onChange={(val) => handleChange('contentWidth', val)}
 						title='Ширина контента'
 					/>
 
